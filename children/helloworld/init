@@ -1,0 +1,5 @@
+#!/bin/sh
+
+npm install
+mkdir -P www/js
+cd www/js && wget http://d3js.org/d3.v3.min.js -O d3.v3.min.js
