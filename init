@@ -2,5 +2,5 @@
 
 npm install
 git submodule update --init
-cd dev/eviltwin/ && checkout eviltwin
+cd dev/eviltwin/ && git checkout eviltwin
 git submodule update --remote --merge
