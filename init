@@ -2,5 +2,4 @@
 
 npm install
 git submodule update --init
-cd dev/eviltwin/ && git checkout eviltwin
-git submodule update --remote --merge
+for dir in $(ls -d children/*); do $(cd $dir; ./init); done
