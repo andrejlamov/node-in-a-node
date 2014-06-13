@@ -58,7 +58,7 @@ function checkout(req, res, dir, srcrepo, commitid) {
       var dest = __dirname + '/checkout/' + sha1;
       var mkdir = 'mkdir -p ' + dest;
       var cd1 = 'cd ' + srcrepo
-      var subtree = 'git --work-tree=' + dest + ' checkout ' + sha1 + ' -- .';
+      var subtree = 'git --work-tree=' + dest + ' checkout -f ' + sha1 + ' -- .';
       var cd2 = 'cd ' + dest
       var init = './init > /dev/null 2>&1';
       var command = '`' + ([mkdir, cd1, subtree, cd2, init].join(' && ')) + '`'
@@ -90,12 +90,12 @@ function maybeSpawnAndForward(req, res, dir, subdomain) {
       spawnAndForward(req, res, dir, subdomain);
     } else {
       if(nodes[dir][subdomain]) {
-        conosle.log('Did I kill from here?')
-        nodes[dir][subdomain].node.kill('SIGHUP');
+        var n = nodes[dir][subdomain].node
+        if(n) n.kill('SIGHUP');
         delete nodes[dir][subdomain];
       }
       res.writeHead(200);
-      res.end('No ' + subdomain + ' here!');
+      res.end('No ' + __dirname + '/' + dir + '/' + subdomain + ' here!');
     }
   })
 }
@@ -125,7 +125,7 @@ function handle(req, res, dir, subdomain) {
       res.end('Could not find a free port\n\n' + err);
       return;
     }
-    var serverPath = path + '/server.js';
+    var serverPath = __dirname + '/' + path + '/server.js';
     var node = undefined;
     try {
       console.log(basePort, 'is forking', serverPath, port);
@@ -139,18 +139,18 @@ function handle(req, res, dir, subdomain) {
 
     console.log(basePort, 'waiting on message from', serverPath, port);
     node.on('message', function(msg) {
-                         if (msg.msg == 'ready' && msg.sender == port) {
-                           nodes[dir][subdomain] = {'node': node, 'port':port};
-                           console.log(basePort, 'got message from', msg.sender);
-                           if(process.send) process.send({msg: 'ready', sender: port});
-                           console.log('watching', serverPath)
-                           fs.watch(serverPath, function(event,filename) {
-                             console.log(__dirname, 'killed', serverPath,' in ', path, 'changed,',basePort, 'killing node', port);
-                             console.log('fs.watch:', event, filename);
-                             if(node) node.kill('SIGHUP');
-                           })
-                           proxy.web(req, res, { target: 'http://127.0.0.1:' + port });
-                         }
+      if (msg.msg == 'ready' && msg.sender == port) {
+        nodes[dir][subdomain] = {'node': node, 'port':port};
+        console.log(basePort, 'got message from', msg.sender);
+        if(process.send) process.send({msg: 'ready', sender: port});
+        console.log('watching', serverPath)
+        fs.watch(serverPath, function(event,filename) {
+          console.log(__dirname, 'killed', serverPath,' in ', path, 'changed,',basePort, 'killing node', port);
+          console.log('fs.watch:', event, filename);
+          if(node) node.kill('SIGHUP');
+        })
+        proxy.web(req, res, { target: 'http://127.0.0.1:' + port });
+      }
     });
     node.on('close', function(_signal, _code) {
       console.log(serverPath,'at', port, 'is dead');
