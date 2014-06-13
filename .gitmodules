@@ -4,3 +4,6 @@
 [submodule "dev/alex"]
 	path = dev/alex
 	url = /home/andrej/code/node-in-a-node/
+[submodule "dev/andrej"]
+	path = dev/andrej
+	url = git@github.com:andrejlamov/node-in-a-node.git
