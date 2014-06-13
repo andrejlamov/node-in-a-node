@@ -1,6 +1,3 @@
-[submodule "dev/eviltwin"]
-	path = dev/eviltwin
-	url = git@github.com:andrejlamov/node-in-a-node.git
 [submodule "children/puzzle"]
 	path = children/puzzle
 	url = git@github.com:andrejlamov/puzzle.git
