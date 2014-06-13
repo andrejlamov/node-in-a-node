@@ -1,3 +1,9 @@
 [submodule "dev/eviltwin"]
 	path = dev/eviltwin
 	url = git@github.com:andrejlamov/node-in-a-node.git
+[submodule "children/puzzle"]
+	path = children/puzzle
+	url = git@github.com:andrejlamov/puzzle.git
+[submodule "dev/alex"]
+	path = dev/alex
+	url = /home/andrej/code/node-in-a-node/
