@@ -1,0 +1,13 @@
+#!/bin/sh
+
+root=`pwd`
+
+npm install
+for dir in $(ls -d children/*)
+do
+    cd $dir
+    ./init
+    git remote add parent ../../
+    git fetch --all
+    cd $root
+done

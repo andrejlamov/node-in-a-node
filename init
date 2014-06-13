@@ -1,6 +1,4 @@
 #!/bin/sh
 
-npm install
 git submodule update --init
-for dir in $(ls -d children/*); do $(cd $dir; git remote add parent ../../ && git fetch); done
-for dir in $(ls -d children/*); do $(cd $dir; ./init); done
+npm install
