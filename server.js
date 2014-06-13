@@ -85,7 +85,7 @@ function checkout(req, res, dir, srcrepo, commitid) {
 }
 
 function maybeSpawnAndForward(req, res, dir, subdomain) {
-  fs.exists(dir + '/' + subdomain, function(exists) {
+  fs.exists(__dirname + '/' + dir + '/' + subdomain, function(exists) {
     if (exists){
       spawnAndForward(req, res, dir, subdomain);
     } else {
