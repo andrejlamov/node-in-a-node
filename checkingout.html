@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+<p id="checkout"></p>
+<script>
+ var msg = "Checking out ";
+ var dots = ['.', '..', '...'];
+ var idx = 0;
+
+ function update(idx){ document.getElementById("checkout").innerHTML = msg + dots[idx]; }
+
+ update(idx);
+ idx++;
+ setInterval(function(){
+   if(idx == 3) idx = 0;
+   update(idx);
+   idx++;
+ }, 300);
+ setTimeout(function(){
+   location.reload();
+ }, 5000)
+</script>
+</body>
+</html>
